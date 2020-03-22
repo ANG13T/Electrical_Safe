@@ -28,10 +28,12 @@ void setup(){
    lcd.setCursor(0,0);
    lcd.print("Enter Password:");
    lockServo.attach(10);
+   closeLocker();
 }
 
 int passwordLength = 0;
 String password = "";
+int angle;
   
 void loop(){
   //Defining positon to write from first row,first column .
@@ -68,6 +70,14 @@ void loop(){
 void correctPassword(){
   reset();
   lcd.print("Correct!"); 
+  if(angle == 180){
+    openLocker();
+  }else{
+    closeLocker();
+  }
+  delay(1000);
+  lcd.clear();
+  lcd.print("Enter Password:");
 }
 
 void incorrectPassword(){
@@ -83,4 +93,22 @@ void reset(){
     passwordLength = 0;
     password = "";
     lcd.setCursor(0,0);
+}
+
+//120 180
+
+void openLocker(){
+  for(angle = 180; angle > 95; angle -= 1)    // command to move from 0 degrees to 180 degrees 
+  {                                  
+    lockServo.write(angle);
+    delay(15);                       
+  } 
+}
+
+void closeLocker(){
+  for(angle = 95; angle < 180; angle += 1)    // command to move from 0 degrees to 180 degrees 
+  {                                  
+    lockServo.write(angle);
+    delay(15);                       
+  } 
 }
