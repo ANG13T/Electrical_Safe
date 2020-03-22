@@ -31,14 +31,17 @@ void setup(){
 }
 
 int passwordLength = 0;
+String password = "";
   
 void loop(){
   //Defining positon to write from first row,first column .
    //You can write 16 Characters per line .
   char key = keypad.getKey();
   
-  if (key){
+  if (key && key != '#'){
     Serial.println(key);
+    Serial.println("pswrd: " + password);
+    password += key;
     passwordLength = passwordLength + 1;
     lcd.setCursor(passwordLength,1);
     lcd.print(key);
@@ -46,13 +49,38 @@ void loop(){
 
   if(key == '#'){
     Serial.println("enter");
+    Serial.println(key);
+    if(password == "123AB"){
+      correctPassword();
+    }else{
+      incorrectPassword();
+    }
   }
 
   if(key == '*'){
     Serial.println("reset");
-    lcd.clear();
-    lcd.setCursor(0,0);
+    reset();
     lcd.print("Enter Password:");
-    passwordLength = 0;
   }
+}
+
+
+void correctPassword(){
+  reset();
+  lcd.print("Correct!"); 
+}
+
+void incorrectPassword(){
+  reset();
+  lcd.print("Wrong Password!");
+  delay(1000);
+  lcd.clear();
+  lcd.print("Enter Password:");
+}
+
+void reset(){
+    lcd.clear();
+    passwordLength = 0;
+    password = "";
+    lcd.setCursor(0,0);
 }
